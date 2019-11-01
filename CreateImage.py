@@ -2,6 +2,7 @@ from PIL import Image
 import numpy as np
 import math 
 import random
+import os.path
 
 
 #tinh resolution tu 1 hinh va 4 huong xem co huong nao la canh ko
@@ -135,7 +136,7 @@ def CreateSinglePiece(pieceIndex,cols,rows,pieceSize):
 
     # do phan giai cho 1 mieng
     edgesDefine = Get4Index(pieceIndex,cols,rows)
-    print(edgesDefine)
+    
     targetpieceResolution = GetTargetResolution(pieceSize,edgesDefine)
     
 
@@ -167,22 +168,63 @@ def CreateSinglePiece(pieceIndex,cols,rows,pieceSize):
 
 
     #imgMid.show()
-    imgMid.save('Set1/'+str(pieceIndex)+'.png')
+    imgMid.save(strPath+'/'+str(pieceIndex)+'.png')
 
 
     
-  
-    
-  
-
-
-
+print('Hello man')
 #do phan giai
-sourceResolution = (1920,1080)
-
+width = 0
+height =0
+while 1==1:
+    strResolution = input('Hay nhap do phan giai cach bang dau x: ').split('x')
+    if len(strResolution) != 2:
+        print('Nhap sai cau truc , mau 1920x1080, hay nhap lai')
+        continue
+    try:
+        print(strResolution[0])
+        width = int(strResolution[0])
+        height = int(strResolution[1])
+        break
+    except :
+        print('Hay nhap 2 so cach bang dau x')
+        continue
+   
+   
+sourceResolution = (width,height)
 # so dong va cot
 cols = 4
 rows = 3
+
+while 1==1:
+    strResolution = input('Hay nhap cot va dong cach bang dau x: ').split('x')
+    if len(strResolution) != 2:
+        print('Nhap sai cau truc , mau 4x3, hay nhap lai')
+        continue
+   
+    try:
+        colIp = int(strResolution[0])
+        rowIp = int(strResolution[1])
+        cols = colIp
+        rows = rowIp
+        break
+    except :
+        print('Hay nhap 2 so cach bang dau x')
+        continue
+
+    
+print('Do phan giai')
+print(sourceResolution)
+print('So cot va so dong')
+print(str(cols)+" x "+str(rows))
+print('Processing..........')
+
+#kiem tra va tao folder
+strPath = str(sourceResolution[0])+"X"+str(sourceResolution[1])+"_"+str(cols)+"x"+str(rows)
+if not os.path.exists(strPath):
+    os.makedirs(strPath)
+
+
 # do phan giai cho 1 mieng 
 pieceResolution = (math.floor(sourceResolution[0]/cols),math.floor(sourceResolution[1]/rows))
 
@@ -199,7 +241,7 @@ matchPixelW,matchPixelH = CalculateMathPixel((imgDuc.size),pieceResolution)
 
 #array duc cai quyet dinh phan loi lom cua cac mieng
 total = (cols-1) * rows + cols * (rows-1)
-print(total)
+
 pieceTarget = [None] * total
 
 index =0
@@ -210,3 +252,6 @@ for i in range(total):
     pieceTarget[i] = tmp
 for i in range(cols*rows ):
     CreateSinglePiece(i, cols,rows,pieceResolution)
+
+print('Done')
+print('Ket qua trong folder:'+strPath)
